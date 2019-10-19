@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+
+<h1 class="btn btn-lg btn-secondary my-sm-2">LOGIN</h1>
+
+<form action="/login" method="POST">
+    <div class="btn btn-lg btn-secondary">
+        <label for="">Username:</label><br>
+        <input type="text" name="username" class="form-group" value="{{request.form.username}}"><br>
+        <label for="">Password:</label><br> 
+        <input type="password" name="password" class="form-group" value="{{request.form.password}}"><br>
+        <p> <input type="submit" class="btn btn-light btn-outline-info my-sm-2" value="Submit"></p>
+    </div>
+    <p></p>
+</form>
+
+
+{% endblock %}

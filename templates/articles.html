@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<h1 class="text-center">Articles</h1>
+<div class="lead jumbotron ">
+  <ul class="lead list-group text-center">
+    {% for article in articles %}
+      <li class="list-group-item">
+        <a href="article/{{article.id}}">{{article.title}}</a>
+      </li>
+    {% endfor  %}
+  </ul>
+</div>
+
+{% endblock %}

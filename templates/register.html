@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+
+<h1 class="btn btn-lg btn-secondary my-sm-2">REGISTER</h1>
+{% from "includes/_formhelpers.html" import render_field %}
+<form action="/register" method="POST">
+    <div class="btn btn-lg btn-secondary">
+        {{render_field(form.name, class="form-control")}}
+        {{render_field(form.email, class="form-control")}}
+        {{render_field(form.username, class="form-control")}}
+        {{render_field(form.password, class="form-control")}}
+        {{render_field(form.confirm, class="form-control")}}
+        <p> <input type="submit" class="btn btn-light btn-outline-info my-sm-2" value="Submit"></p>
+    </div>
+    <p></p>
+</form>
+
+
+{% endblock %}

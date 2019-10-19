@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+
+<h1 class="btn btn-lg btn-outline-success- my-sm-2">ADD ARTICLES</h1>
+{% from "includes/_formhelpers.html" import render_field %}
+<form action="/add_article" method="POST">
+    <div class="container container-secondary">
+        {{render_field(form.title, class="form-control")}}
+        {{render_field(form.body, class="form-control", id = "editor")}}
+        <p> <input type="submit" class="btn btn-light btn-outline-info my-sm-2" value="Submit"></p>
+    </div>
+    <p></p>
+</form>
+
+
+{% endblock %}

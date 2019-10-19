@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block body %}
+
+{% for column in article %}
+     <div class="lead jumbotron container container-striped">
+          <h2 class="text-center">{{column.title}}</h2>
+          {{column.body}}<br>
+          Author: {{column.author}}<br>
+          Date_created: {{column.date_created}}
+     </div>
+{% endfor %}
+
+{% endblock %}
+
+<!-- <h1 class="text-center">{{article.title}}</h1>
+<div class="container container-secondary">
+          {% for k in id %}
+               <div class="lead jumbotron text-justify">
+                    {% for i in k: %}
+                         {% if i!= 'id' %}
+                              {% if i== 'author' and i=='date_created' %}
+                                   <ul>
+                                        <li>{{ k[i] }}</li>
+                                   </ul>
+                              {% else %}
+                                   <p>{{ k[i] }}</p>
+                              {% endif %}
+                         {% endif %}
+                    {% endfor %}
+               </div>
+          {% endfor %}
+     </div> -->
