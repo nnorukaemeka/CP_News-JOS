@@ -1,33 +1,43 @@
 {% extends "layout.html" %}
 
+{% block title %} article {% endblock %}
+
 {% block body %}
 
-{% for column in article %}
-     <div class="lead jumbotron container container-striped">
-          <h2 class="text-center">{{column.title}}</h2>
-          {{column.body}}<br>
-          Author: {{column.author}}<br>
-          Date_created: {{column.date_created}}
-     </div>
-{% endfor %}
+    <div class="lead jumbotron container container-striped">
+        
+        <h1>{{context[0].title}}</h1>
+        <small>Written by {{context[0].author}} on {{context[0].date_created}}</small>
+        <hr>
+        {{context[0].body | safe}} <!-- #'| safe' stops <p></p> from showing on the body of the article -->  
+    </div>
+    <hr>
+    
+    <div>
+        <h4><strong>Comments:</strong></h4>
+        <!-- {% include 'includes/_messages.html' %} -->
+        {% for comment in context[1] %}
+            {{comment.body | safe}}  -{{ comment.username }} {{comment.date_created}}
+            <hr>
+        {% endfor %}
+        <hr>
+
+        <h4><strong>Post a comment:</strong></h4>
+        {% if session.logged_in == True %}
+            {% from "includes/_formhelpers.html" import render_field %}
+            <form action="/article/<string:id>/" method="POST">
+                <div class="container container-secondary">
+                    {{render_field(form.body, class="form-control", id = "editor")}}
+                    <input type="hidden" name= "id" value="{{context[0].id}}">
+                    <div class="action-buttons">
+                        <input type="submit" class="btn btn-info border-info  my-sm-2" value="Post">
+                    </div>
+                </div>
+            </form>
+        {% else %}
+            <p>Please <a href="/login"> login</a> to post your comment</p>
+        {% endif %}
+
+    </div>
 
 {% endblock %}
-
-<!-- <h1 class="text-center">{{article.title}}</h1>
-<div class="container container-secondary">
-          {% for k in id %}
-               <div class="lead jumbotron text-justify">
-                    {% for i in k: %}
-                         {% if i!= 'id' %}
-                              {% if i== 'author' and i=='date_created' %}
-                                   <ul>
-                                        <li>{{ k[i] }}</li>
-                                   </ul>
-                              {% else %}
-                                   <p>{{ k[i] }}</p>
-                              {% endif %}
-                         {% endif %}
-                    {% endfor %}
-               </div>
-          {% endfor %}
-     </div> -->

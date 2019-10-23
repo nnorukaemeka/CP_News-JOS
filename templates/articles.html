@@ -1,15 +1,14 @@
 {% extends "layout.html" %}
 
+{% block title %}list of articles{% endblock %}
+
 {% block body %}
 <h1 class="text-center">Articles</h1>
-<div class="lead jumbotron ">
-  <ul class="lead list-group text-center">
+<div class="lead jumbotron text-center ">
     {% for article in articles %}
-      <li class="list-group-item">
-        <a href="article/{{article.id}}">{{article.title}}</a>
-      </li>
+      <a href="article/{{article.id}}">{{article.title}}</a>
+      <hr>
     {% endfor  %}
-  </ul>
 </div>
 
 {% endblock %}
