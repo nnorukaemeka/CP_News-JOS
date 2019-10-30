@@ -1,4 +1,4 @@
-#!/home/megzy/PycharmProjects/codeProjects/venv/bin/python3.7
+#!/home/megzy/PycharmProjects/codeProjects/flask_framework/cp_news/venv/bin/python3
 
 # -*- coding: utf-8 -*-
 import re

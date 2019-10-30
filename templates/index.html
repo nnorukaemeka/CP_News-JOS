@@ -4,17 +4,32 @@
 
 {% block body %}
 
-<h1 class="text-center">WELCOME TO CP NEWS</h1>
-<marquee behavior="" direction=""><h3>Code-Plateau News (CP News) is a Code Plateau BackEnd Project Developed Using Flask Framework</h3></marquee>
-
-<div class="jumbotron">
-    <div class="media">
-        <img src="/static/bootstrap-4.3.1-dist/images/codeplalogo.png" class="align-self-start mr-3" alt="code plateau logo" width="304" height="236">
-        <div class="media-body">
-            <h5 class="mt-0">Code Plateau 1.0</h5>
-            <p>Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.</p>
-            <p>Donec sed odio dui. Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-        </div>
+<div class="container">
+  <h1>WELCOME TO CP NEWS</h1>
+  <marquee behavior="" direction=""><h3>Code-Plateau News (CP News) is a Code Plateau BackEnd Project Developed Using Flask Framework</h3></marquee>
+  <div class="d-flex-row">
+    <div class="col-sm-9">
+      {% include 'includes/_slide1.html' %}
     </div>
+    <div class="col-8 col-sm-6">
+      <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Deleniti esse cupiditate, quis tempore itaque voluptatum error, sed quasi culpa consectetur quos qui obcaecati sequi voluptate recusandae consequatur, necessitatibus non placeat.</p>
+    </div>
+
+  </div>
 </div>
+
+<!-- <div class="jumbotron text-center">
+    <h1>WELCOME TO CP NEWS</h1>
+    <marquee behavior="" direction=""><h3>Code-Plateau News (CP News) is a Code Plateau BackEnd Project Developed Using Flask Framework</h3></marquee>
+    {% include 'includes/_slide1.html' %}
+    <hr>
+    {% if session.logged_in == NULL %}
+       
+        <a class="btn btn-dark btn-lg mr-sm-1" href="/register">Register <span class="sr-only">(current)</span></a>
+        <a class="btn btn-dark btn-lg my-2 my-sm-0" href="/login">Login</a>
+       
+    {% endif %}
+</div> -->
+
+
 {% endblock %}

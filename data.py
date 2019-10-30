@@ -29,4 +29,5 @@ def newsArticles():
             'created_date':'12-10-2019'
         }
     ]
+    
     return articles

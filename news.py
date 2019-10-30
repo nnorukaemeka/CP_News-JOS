@@ -4,8 +4,13 @@ from flask_mysqldb import MySQL
 from passlib.hash import sha256_crypt
 from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from functools import wraps
+from MySQLdb import escape_string as thwart
+import gc
 import os
-import sys
+import re
+import smtplib
+
+
 
 
 app = Flask(__name__)
@@ -64,14 +69,17 @@ def is_logged_in(f):
 def homepage():
     return render_template("index.html")
 
-#ABOUT
-# @app.route("/about")
-# def about():
-#     return render_template("about.html")
 
-@app.route("/newsfeed")
-def newsfeed():
-    return render_template("newsfeed.html")
+#ABOUT ROUTE
+@app.route("/about")
+def history():
+    return render_template("about.html")
+
+
+#CAREERS ROUTE
+@app.route("/careers")
+def careers():
+    return render_template("careers.html")
 
 
 
@@ -86,23 +94,42 @@ def register():
         username = form.username.data
         password = sha256_crypt.encrypt(str(form.password.data)) #hashes the password
         
+        # Check if account exists using MySQL
+
         #create cursor
         cur = mysql.connection.cursor()
 
-        #post data into database
-        cur.execute ("INSERT INTO signup (name, email, username, password) VALUES (%s, %s, %s, %s)", (name, email, username, password))
+        #Get user by username
+        result = cur.execute("SELECT * FROM signup WHERE email = %s", [email]) 
 
-        # commit to database
-        mysql.connection.commit()
+        account = cur.fetchone()
+        # If account exists show error and validation checks
+        if account:
+            error = 'Account already exists!'
+            return render_template("register.html", form=form, error=error)
+        elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
+            error = 'Invalid email address!'
+            return render_template("register.html", form=form, error=error)
+        elif not re.match(r'[A-Za-z0-9]+', username):
+            error = 'Username must contain only characters and numbers!'
+            return render_template("register.html", form=form, error=error)
+        else:
+            # Account doesnt exists and the form data is valid, now insert new account into signup table
+            cur.execute ("INSERT INTO signup (name, email, username, password) VALUES (%s, %s, %s, %s)", (name, email, username, password))
 
-        #close the cursor
-        cur.close()
+            # commit to database
+            mysql.connection.commit()
 
-        #flash a message
-        flash("You are now registered and can log in.", "success") #success is a category
-        return redirect(url_for("login"))
-    #if request.method == "GET"
-    return render_template("register.html", form=form)
+            #close the cursor
+            cur.close()
+            gc.collect()
+            #flash a message
+            flash("You are now registered and can log in.", "success") #success is a category
+            return redirect(url_for("login"))
+    else:
+        #if request.method == "GET"
+        return render_template("register.html", form=form)
+
 
 
 #LOGIN USER
@@ -128,26 +155,27 @@ def login():
             if sha256_crypt.verify(password_candidate, password):
                 # app.logger.info('Password matched!') #for development purpose
                 session['logged_in'] = True
-                session['username'] = username
+                session['username'] = data['username']
                 session['password'] = password_candidate
                 flash("You are successfully logged in", "success")
                 return redirect(url_for("dashboard"))
             else:
-                error = 'Invalid Login Credentials!'
+                error = 'Invalid credentials, try again.'
                 # flash("Failed, wrong inputs!", "warning")
                 return render_template("login.html", error=error)
                 # app.logger.info('Password mismatched!') #for development purpose
         else:
-            error = 'User Not Found!'
+            error = 'Invalid credentials, try again.'
             # flash("User not found!", "warning")
             return render_template("login.html", error=error)
             # app.logger.info('User not found!') #for development purpose
         
         #close the cursor
         cur.close()
-
+        gc.collect()
     #if request.method == "GET"
     return render_template("login.html")
+
     
 
 #DASHBOARD ROUTE
@@ -176,6 +204,27 @@ def logout():
     session.clear()
     flash('You are now logged out', 'success')
     return redirect(url_for("login"))
+
+
+@app.route('/dashboard/profile')
+@is_logged_in
+def profile():
+    # Check if user is loggedin
+    if session['logged_in'] == True:
+        # We need all the account info for the user so we can display it on the profile page
+
+        #create cursor
+        cur = mysql.connection.cursor()
+
+        #Get user by username
+        result = cur.execute("SELECT * FROM signup WHERE username = %s", [session['username']]) 
+
+        account = cur.fetchone()
+        password = sha256_crypt.decrypt(str(account['password']))
+        # Show the profile page with account info
+        return render_template('profile.html', account=account, password=password)
+    # User is not loggedin redirect to login page
+    return redirect(url_for('login'))
 
 
 #ADD_ARTICLE ROUTE
@@ -276,10 +325,6 @@ def article(id):
 
 
 
-
-    
-
-
 @app.route("/edit_article/<string:id>/", methods=["GET","POST"])
 @is_logged_in
 def edit_article(id):
@@ -343,16 +388,6 @@ def delete_article(id):
     return redirect(url_for("dashboard"))
 
 
-#ABOUT ROUTE
-@app.route("/about")
-def history():
-    return render_template("about.html")
-
-
-#CAREERS ROUTE
-@app.route("/careers")
-def careers():
-    return render_template("careers.html")
 
 
 #RUN THE PYTHON APP.PY

@@ -14,15 +14,17 @@
     <hr>
     
     <div>
-        <h4><strong>Comments:</strong></h4>
+        <h2><strong>Comments:</strong></h2>
         <!-- {% include 'includes/_messages.html' %} -->
         {% for comment in context[1] %}
-            {{comment.body | safe}}  -{{ comment.username }} {{comment.date_created}}
+            <blockquote>
+            <p>{{comment.body | safe}}</p> <small>-{{ comment.username }}  {{comment.date_created}}</small>
+            </blockquote>
             <hr>
         {% endfor %}
         <hr>
 
-        <h4><strong>Post a comment:</strong></h4>
+        <h3><strong>Post a comment:</strong></h3>
         {% if session.logged_in == True %}
             {% from "includes/_formhelpers.html" import render_field %}
             <form action="/article/<string:id>/" method="POST">
