@@ -8,4 +8,15 @@ With this project, I was able to learn how to:
   * authenticate, validate and verify an account
   * Model - View - Controller (MVC)
   * Use FLASK framework and jinja 2 template in creating projects
-<img src="/home/megzy/Pictures/screen0.png">
+  
+A snapshoot of the LANDING page <img src="/static/bootstrap-4.3.1-dist/images/screen0.png">
+
+A snapshoot of the REGISTER page <img src="/static/bootstrap-4.3.1-dist/images/screen1.png">
+
+A snapshoot of the LOGIN page <img src="/static/bootstrap-4.3.1-dist/images/screen2a.png">
+
+A snapshoot of the DASHBOARD after successful login <img src="/static/bootstrap-4.3.1-dist/images/screen2.png">
+
+A snapshoot of the ADD ARTICLE page <img src="/static/bootstrap-4.3.1-dist/images/screen5.png">
+
+A snapshoot of the VScode IDE running Flask server <img src="/static/bootstrap-4.3.1-dist/images/screen6.png">
